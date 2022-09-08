@@ -11,7 +11,7 @@ if(!isset($_SESSION["user_id"]))
     exit();
 }
 
-$loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id = " . $_SESSION['user_id'])->fetch_assoc();
+$loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id =" .$_SESSION['user_id'])->fetch_assoc();
 
 ?>
 <!DOCTYPE html>
@@ -100,15 +100,13 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id = " . $_S
                             $query5="SELECT COUNT(*) FROM actions WHERE DATE_FORMAT(action_date, '%Y-%m-%d') = '" . date("Y-m-d", time()) . "'";
                             $select_actions=mysqli_query($connection,$query5)->fetch_column(0);
                         }
-
-
                         $select_project=mysqli_query($connection,$query1)->fetch_column(0);
 
                         $select_fproject=mysqli_query($connection,$query4)->fetch_column(0);
                         $select_project_new=mysqli_query($connection,$query6)->fetch_column(0);
                         ?>
                         <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
-                            <i class="material-icons opacity-10">weekend</i>
+                            <i class="material-icons opacity-10">table_view</i>
                         </div>
                         <div class="text-end pt-1">
                             <p class="text-sm mb-0 text-capitalize">Projeler</p>
@@ -126,7 +124,7 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id = " . $_S
                 <div class="card">
                     <div class="card-header p-3 pt-2">
                         <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
-                            <i class="material-icons opacity-10">person</i>
+                            <i class="material-icons opacity-10">store</i>
                         </div>
                         <div class="text-end pt-1">
                             <p class="text-sm mb-0 text-capitalize">Müşteriler</p>
@@ -143,7 +141,7 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id = " . $_S
                 <div class="card">
                     <div class="card-header p-3 pt-2">
                         <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
-                            <i class="material-icons opacity-10">person</i>
+                            <i class="material-icons opacity-10">engineering</i>
                         </div>
                         <div class="text-end pt-1">
                             <p class="text-sm mb-0 text-capitalize">Personeller</p>
@@ -163,7 +161,7 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id = " . $_S
                 <div class="card">
                     <div class="card-header p-3 pt-2">
                         <div class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
-                            <i class="material-icons opacity-10">weekend</i>
+                            <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
                         </div>
                         <div class="text-end pt-1">
                             <p class="text-sm mb-0 text-capitalize">Yapılan İşlem Sayısı</p>
@@ -193,16 +191,6 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id = " . $_S
                                 </p>
                             </div>
                             <div class="col-lg-6 col-5 my-auto text-end">
-                                <!-- <div class="dropdown float-lg-end pe-4">
-                                  <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa fa-ellipsis-v text-secondary"></i>
-                                  </a>
-                                  <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
-                                    <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>
-                                    <li><a class="dropdown-item border-radius-md" href="javascript:;">Another action</a></li>
-                                    <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>
-                                  </ul>
-                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -303,7 +291,6 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id = " . $_S
         </div>
     </div>
     </div>
-    <?php include "../includes/footer.php"; ?>
     </div>
 </main>
 <?php include "../includes/navbar_settings.php"; ?>

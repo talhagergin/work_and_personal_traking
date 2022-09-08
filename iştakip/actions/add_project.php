@@ -62,7 +62,7 @@ require_once "../helps.php";
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- Font Awesome Icons -->
-  <scrip src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- CSS Files -->
@@ -140,7 +140,7 @@ require_once "../helps.php";
                   </div>
                 </div>
               </div>
-      <?php include "../includes/footer.php"; ?>
+
     </div>
   </main>
   <!-- Navbar Ayarları -->

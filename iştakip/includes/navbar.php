@@ -17,6 +17,7 @@
               <a href="../pages/profile.php?user_id=<?=$_SESSION['user_id'] ;?>" class="nav-link text-body font-weight-bold px-0">
                 <i class="fa fa-user me-sm-1"></i>
                 <span class="d-sm-inline d-none"><?=$loginUser["username"];?></span>
+
               </a>
             </li>
               <li>

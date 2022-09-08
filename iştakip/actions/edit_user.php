@@ -14,22 +14,42 @@ if(isset($_GET['user_id'])){
     //Veritabanında olup olmama controlü
     $the_user_id= $_GET['user_id'];
     //kullanıcı başkasını düzenlemeye çalıştığında
-    if($the_user_id != $_SESSION['user_id']){
-        header("Location: ../pages/dashboard.php");
-        exit();
+    if($the_user_id != $_SESSION['user_id']) {
+        if ($_SESSION['user_role'] == 0) {
+            header("Location: ../pages/dashboard.php");
+            exit();
+        }
+        else{
+            $query = "SELECT * FROM users WHERE user_id={$the_user_id}";
+            $users=mysqli_query($connection,$query)->fetch_assoc();
+            $user_image=$users['user_image'];
+
+        }
     }
-    $query = "SELECT * FROM users WHERE user_id={$the_user_id}";
-    $users=mysqli_query($connection,$query)->fetch_assoc(); 
+    else
+    {
+        $query = "SELECT * FROM users WHERE user_id={$the_user_id}";
+        $users = mysqli_query($connection, $query)->fetch_assoc();
+        $user_image = $users['user_image'];
+    }
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
+        if (isset($_FILES['image']['name']) && !empty($_FILES['image']['name'])) {
+            $user_image=$_FILES['image']['name'];
+            $user_image_temp =$_FILES['image']['tmp_name'];
+
+            move_uploaded_file($user_image_temp,"../assets/img/user_image/$user_image");
+        }
+
         $query="UPDATE users SET 
         username= '{$_POST["username"]} ',
         user_firstname='{$_POST["name"]}',
         user_lastname='{$_POST["name"]} ',
         user_email='{$_POST["email"]} ',
         user_phone='{$_POST["phone"]} ',
-        user_password='{$_POST["email"]} ',
-        user_role='{$_POST["user_role"]}'
+        user_password='{$_POST["password"]} ',
+        user_role='{$_POST["user_role"]}',
+        user_image ='{$user_image}' 
         WHERE user_id='{$the_user_id}'";
         $update_user=mysqli_query($connection,$query);
 
@@ -85,7 +105,7 @@ require_once "../helps.php";
         <div class="card">
                   <div class="card-body">
                     <h4 class="card-title"></h4>
-                    <form class="forms-sample" action="<?= $_SERVER["PHP_SELF"]; ?>?user_id=<?=  $the_user_id=$_GET['user_id']; ?>" method="post">
+                    <form class="forms-sample" action="<?= $_SERVER["PHP_SELF"]; ?>?user_id=<?=  $the_user_id=$_GET['user_id']; ?>" method="post" enctype="multipart/form-data">
                       <div class="form-group">
                         <label for="project_name" style="font-size: 20px;">Kullanıcı Ad</label>
                         <input type="text" class="form-control" placeholder="Kullanıcı Ad" value="<?=$users['username']?>" name="username" style="border:1px solid gray">
@@ -115,20 +135,18 @@ require_once "../helps.php";
                       </div>
                       <div class="form-group">
                         <label for="company_name"style="font-size: 20px;">Şifre</label>
-                        <input type="password" class="form-control" id="user_password" placeholder="Şifre" name="password" value="<?=$users['user_password']?>"style="border:1px solid gray">
+                        <input type="text" class="form-control" id="user_password" placeholder="Şifre" name="password" value="<?=$users['user_password']?>"style="border:1px solid gray">
                       </div>
                       <div class="form-group"style="margin-bottom: 10px; margin-top: 10px;">
-                        <label>Resim Seç</label>
-                        <input type="file" name="img[]" class="file-upload-default">
+                        <label>Profil Fotoğrafı</label>
+                          <img class="form-control max-width-200" src="../assets/img/user_image/<?=$users['user_image'];?>" alt="">
+                        <input type="file" name="image" class="file-upload-default">
                       </div>
                       <button type="submit" name="save_user" class="btn btn-primary mb-5 mt-3">Kaydet</button>
-                     <!-- <button class="btn btn-dark" style="margin-bottom:50px;"><a href="../pages/dashboard.php">İptal</button></a> -->
                     </form>
                   </div>
                 </div>
               </div>
-
-       <?php include "../includes/footer.php"; ?>
     </div>
   </main>
   <!-- Navbar Ayarları -->

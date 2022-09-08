@@ -18,7 +18,7 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id = " . $_S
 
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
-   
+
 if(!empty($_POST['company_name']) && !empty($_POST['company_adress']) && !empty($_POST['company_phone']))
 {
     $company_name=$_POST['company_name'];
@@ -109,7 +109,7 @@ require_once "../helps.php";
                   </div>
                 </div>
               </div>
-      <?php include "../includes/footer.php"; ?>
+
   </main>
   <!-- Navbar Ayarları -->
   <?php include "../includes/navbar_settings.php"; ?>

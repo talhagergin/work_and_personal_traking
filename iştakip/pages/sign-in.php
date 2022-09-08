@@ -19,7 +19,7 @@ if(isset($_POST['login'])){
 
   if(!$user){
     $_SESSION["isLogin"]=false;
-    echo "<script>alert('Login Error');</script>";
+    $_SESSION["errors"][]="Kullanıcı adı ya da şifre hatalı!";
   }
   else{
   $_SESSION["user_id"] = $user["user_id"];
@@ -69,11 +69,6 @@ if(isset($_SESSION["user_id"])){
               <img src="../assets/img/logo.png"  style=width:150px;>
             </a>
             <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
-              <!-- <span class="navbar-toggler-icon mt-2">
-                <span class="navbar-toggler-bar bar1"></span>
-                <span class="navbar-toggler-bar bar2"></span>
-                <span class="navbar-toggler-bar bar3"></span>
-              </span> -->
             </button>
           </div>
         </nav>
@@ -86,6 +81,15 @@ if(isset($_SESSION["user_id"])){
       <span class="mask bg-gradient-dark opacity-6"></span>
       <div class="container my-auto">
         <div class="row">
+            <?php
+            if(isset($_SESSION["errors"])) { ?>
+                <div class="alert alert-danger" role="alert">
+                    <?php
+                    echo implode("<br />", $_SESSION["errors"]);
+                    unset($_SESSION["errors"]);
+                    ?>
+                </div>
+            <?php } ?>
           <div class="col-lg-4 col-md-8 col-12 mx-auto" style="margin-top: 20px;">
             <div class="card z-index-0 fadeIn3 fadeInBottom">
               <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
@@ -101,10 +105,6 @@ if(isset($_SESSION["user_id"])){
                   <div class="input-group input-group-outline mb-3">
                     <input type="password" class="form-control" placeholder="Password" name="password">
                   </div>
-                  <!-- <div class="form-check form-switch d-flex align-items-center mb-3">
-                    <input class="form-check-input" type="checkbox" id="rememberMe" checked>
-                    <label class="form-check-label mb-0 ms-3" for="rememberMe">Beni hatırla</label>
-                  </div> -->
                   <div class="text-center">
                     <button type="submit" class="btn bg-gradient-primary w-100 my-4 mb-2" name="login">Giriş</button>
                   </div>
@@ -121,31 +121,6 @@ if(isset($_SESSION["user_id"])){
         <footer class="footer position-absolute bottom-2 py-2 w-100">
           <div class="container">
             <div class="row align-items-center justify-content-lg-between">
-              <!-- <div class="col-12 col-md-6 my-auto">
-                <div class="copyright text-center text-sm text-white text-lg-start">
-                  © <script>
-                    document.write(new Date().getFullYear())
-                  </script>,
-                  made with <i class="fa fa-heart" aria-hidden="true"></i> by
-                  <a href="https://www.creative-tim.com" class="font-weight-bold text-white" target="_blank">KayraSoft</a>
-                </div>
-              </div> -->
-              <!-- <div class="col-12 col-md-6">
-                <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-                  <li class="nav-item">
-                    <a href="https://www.creative-tim.com" class="nav-link text-white" target="_blank">Creative Tim</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="https://www.creative-tim.com/presentation" class="nav-link text-white" target="_blank">About Us</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="https://www.creative-tim.com/blog" class="nav-link text-white" target="_blank">Blog</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-white" target="_blank">License</a>
-                  </li>
-                </ul>
-              </div> -->
             </div>
           </div>
         </footer>

@@ -28,7 +28,7 @@
         <li class="nav-item">
           <a id="menu-kullanıcılar" class="nav-link text-white " href="<?= url('pages/kullanıcılar.php'); ?>">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">view_in_ar</i>
+              <i class="material-icons opacity-10">engineering</i>
             </div>
             <span class="nav-link-text ms-1">Personeller</span>
           </a>
@@ -36,20 +36,38 @@
           <li class="nav-item">
               <a id="menu-firmalar" class="nav-link text-white " href="<?= url('pages/firmalar.php');?>">
                   <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                      <i class="material-icons opacity-10">notifications</i>
+                      <i class="material-icons opacity-10">store</i>
                   </div>
                   <span class="nav-link-text ms-1">Firmalar</span>
               </a>
           </li>
-          <?php }?>
+              <li class="nav-item">
+                  <a id="menu-missions" class="nav-link text-white " href="<?=url('pages/missions.php');?>">
+                      <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                          <i class="material-icons opacity-10">list_alt</i>
+                      </div>
+                      <span class="nav-link-text ms-1">Görevler</span>
+                  </a>
+              </li>
+          <?php }
+          if($_SESSION['user_role']==0){?>
         <li class="nav-item">
-          <a id="menu-actions" class="nav-link text-white " href="../pages/actions.php">
+          <a id="menu-missions" class="nav-link text-white " href="<?=url('pages/missions.php');?>">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
+              <i class="material-icons opacity-10">list_alt</i>
             </div>
-            <span class="nav-link-text ms-1">İşlemler</span>
+            <span class="nav-link-text ms-1">Görevlerim</span>
           </a>
         </li>
+          <?php } ?>
+          <li class="nav-item">
+              <a id="menu-actions" class="nav-link text-white " href="../pages/actions.php">
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                      <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
+                  </div>
+                  <span class="nav-link-text ms-1">İşlemler</span>
+              </a>
+          </li>
 
         <!-- <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Account pages</h6>

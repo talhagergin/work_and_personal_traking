@@ -37,7 +37,7 @@
   --bs-dark: #344767;
   --bs-white: #fff;
   --bs-primary-rgb: 233, 30, 99;
-  --bs-secondary-rgb: , 128, 154;
+  --bs-secondary-rgb:128 , 128, 154;
   --bs-success-rgb: 76, 175, 80;
   --bs-info-rgb: 26, 115, 232;
   --bs-warning-rgb: 251, 140, 0;
@@ -47,7 +47,7 @@
   --bs-white-rgb: 255, 255, 255;
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 0, 0, 0;
-  --bs-body-color-rgb: , 128, 154;
+  --bs-body-color-rgb:128 , 128, 154;
   --bs-body-bg-rgb: 255, 255, 255;
   --bs-font-sans-serif: "Roboto", Helvetica, Arial, sans-serif;
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -3103,13 +3103,6 @@ textarea.form-control-lg {
   outline: 0;
 }
 
-.form-range:focus::-webkit-slider-thumb {
-  box-shadow: 0 0 0 1px #fff, none;
-}
-
-.form-range:focus::-moz-range-thumb {
-  box-shadow: 0 0 0 1px #fff, none;
-}
 
 .form-range::-moz-focus-outer {
   border: 0;
@@ -3582,7 +3575,7 @@ textarea.form-control.is-invalid {
 .btn {
   --bs-btn-padding-x: 1.5rem;
   --bs-btn-padding-y: 0.625rem;
-  --bs-btn-font-family: ;
+  --bs-btn-font-family:0.5rem;
   --bs-btn-font-size: 0.75rem;
   --bs-btn-font-weight: 700;
   --bs-btn-line-height: 1.667;
@@ -3835,7 +3828,7 @@ fieldset:disabled .btn {
   --bs-btn-hover-color: #000;
   --bs-btn-hover-bg: #7b809a;
   --bs-btn-hover-border-color: #7b809a;
-  --bs-btn-focus-shadow-rgb: , 128, 154;
+  --bs-btn-focus-shadow-rgb:128 , 128, 154;
   --bs-btn-active-color: #000;
   --bs-btn-active-bg: #7b809a;
   --bs-btn-active-border-color: #7b809a;
@@ -4508,7 +4501,7 @@ fieldset:disabled .btn {
 .nav {
   --bs-nav-link-padding-x: 1rem;
   --bs-nav-link-padding-y: 0.5rem;
-  --bs-nav-link-font-weight: ;
+  --bs-nav-link-font-weight:0.5rem ;
   --bs-nav-link-color: var(--bs-link-color);
   --bs-nav-link-hover-color: var(--bs-link-hover-color);
   --bs-nav-link-disabled-color: #6c757d;
@@ -4522,7 +4515,7 @@ fieldset:disabled .btn {
 .nav-link {
   display: block;
   padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
-  font-size: var(--bs-nav-link-font-size);
+
   font-weight: var(--bs-nav-link-font-weight);
   color: var(--bs-nav-link-color);
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
@@ -4775,7 +4768,6 @@ fieldset:disabled .btn {
 }
 
 .navbar-nav-scroll {
-  max-height: var(--bs-scroll-height, 75vh);
   overflow-y: auto;
 }
 
@@ -5494,7 +5486,6 @@ fieldset:disabled .btn {
   flex-wrap: wrap;
   padding: var(--bs-breadcrumb-padding-y) var(--bs-breadcrumb-padding-x);
   margin-bottom: var(--bs-breadcrumb-margin-bottom);
-  font-size: var(--bs-breadcrumb-font-size);
   list-style: none;
   background-color: var(--bs-breadcrumb-bg);
   border-radius: var(--bs-breadcrumb-border-radius);
@@ -5508,7 +5499,6 @@ fieldset:disabled .btn {
   float: left;
   padding-right: var(--bs-breadcrumb-item-padding-x);
   color: var(--bs-breadcrumb-divider-color);
-  content: var(--bs-breadcrumb-divider, "/")
     /* rtl: var(--bs-breadcrumb-divider, "/") */
   ;
 }
@@ -20476,7 +20466,7 @@ fieldset:disabled .btn {
 .btn.bg-gradient-primary:not(:disabled):not(.disabled).active,
 .btn.bg-gradient-primary:not(:disabled):not(.disabled):active,
 .show>.btn.bg-gradient-primary.dropdown-toggle {
-  color: color-yiq(#e91e63);
+
   background-color: #e91e63;
 }
 
@@ -20521,7 +20511,6 @@ fieldset:disabled .btn {
 .btn.bg-gradient-secondary:not(:disabled):not(.disabled).active,
 .btn.bg-gradient-secondary:not(:disabled):not(.disabled):active,
 .show>.btn.bg-gradient-secondary.dropdown-toggle {
-  color: color-yiq(#7b809a);
   background-color: #7b809a;
 }
 
@@ -20566,8 +20555,7 @@ fieldset:disabled .btn {
 .btn.bg-gradient-success:not(:disabled):not(.disabled).active,
 .btn.bg-gradient-success:not(:disabled):not(.disabled):active,
 .show>.btn.bg-gradient-success.dropdown-toggle {
-  color: color-yiq(#4CAF50);
-  background-color: #4CAF50;
+background-color: #4CAF50;
 }
 
 .btn-success.focus,
@@ -20611,7 +20599,6 @@ fieldset:disabled .btn {
 .btn.bg-gradient-info:not(:disabled):not(.disabled).active,
 .btn.bg-gradient-info:not(:disabled):not(.disabled):active,
 .show>.btn.bg-gradient-info.dropdown-toggle {
-  color: color-yiq(#1A73E8);
   background-color: #1A73E8;
 }
 

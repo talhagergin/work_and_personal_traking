@@ -123,11 +123,11 @@ else{
                     <div class="col-md-8 d-flex align-items-center">
                       <h6 class="mb-0">Personel Bilgileri</h6>
                     </div>
-                    <div class="col-md-4 text-end">
-                      <a href="javascript:;">
-                        <i class="fas fa-user-edit text-secondary text-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Profil Düzenle"></i>
-                      </a>
-                    </div>
+<!--                    <div class="col-md-4 text-end">-->
+<!--                      <a href="javascript:;">-->
+<!--                        <i class="fas fa-user-edit text-secondary text-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Profil Düzenle"></i>-->
+<!--                      </a>-->
+<!--                    </div>-->
                   </div>
                 </div>
                 <div class="card-body p-3">
@@ -157,7 +157,7 @@ else{
                     ?>
                     <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2 pt-0">
                       <div class="d-flex align-items-start flex-column justify-content-center">
-                        <a href="#"><h6 class="mb-0 text-sm"><?=$project["project_name"];?></h6></a>
+                        <a href="../pages/projects.php?project_id=<?=$project["project_id"];?>"><h6 class="mb-0 text-sm"><?=$project["project_name"];?></h6></a>
                         <p class="mb-0 text-xs"><?=$project["project_description"];?></p>
                         <p class="mb-0 text-xs"><?=date('d.m.Y',strtotime($project["project_finish_date"]));?></p>
                       </div>
@@ -175,9 +175,6 @@ else{
         </div>
       </div>
     </div>
-    <footer class="footer py-4  ">
-      <div class="container-fluid">
-    </footer>
   </div>
       <!-- Navbar Ayarları -->
       <?php include "../includes/navbar_settings.php"; ?>
@@ -196,7 +193,6 @@ else{
     }
   </script>
   <!-- Github buttons -->
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../assets/js/material-dashboard.min.js?v=3.0.4"></script>
    <script>

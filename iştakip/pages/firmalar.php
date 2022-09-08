@@ -126,9 +126,9 @@ if(isset($_GET['delete'])){
                       </td>
                            
                       <td class="align-middle">
-                        <button style="margin-right:5px; border-radius:5px;">
+                        <button style="margin-right:5px; border-radius:5px;" title="Düzenle">
                        <a href="../actions/edit_company.php?company_id=<?= $company["company_id"]; ?>"><i class="fa fa-solid fa-pencil"></i></a>                     
-                         <button style="margin-right:5px; border-radius:5px;">
+                         <button style="margin-right:5px; border-radius:5px;" title="Sil">
                        <a onclick="javascript:return confirm('Firmayı silmek istediğinizden emin misiniz?');" href="firmalar.php?delete=<?= $company["company_id"]; ?>"><i class="fa fa-solid fa-trash"></i></a>
                         </button>
                         </button>
@@ -144,10 +144,8 @@ if(isset($_GET['delete'])){
       </div>
       <div class="row">
         <div class="col-12">
-         
         </div>
       </div>
-        <?php include "../includes/footer.php"; ?>
     </div>
   </main>
   <?php include "../includes/navbar_settings.php"; ?>

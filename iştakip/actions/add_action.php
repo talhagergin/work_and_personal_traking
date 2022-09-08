@@ -1,5 +1,6 @@
 <?php 
 session_start();
+require_once "../helps.php";
 include ("../includes/db.php"); 
 
 if(!isset($_SESSION["user_id"]))
@@ -24,22 +25,19 @@ if(!empty($_POST['action_detail']))
     $query="INSERT INTO actions (project_id,user_id,action_detail,action_date) ";
     $query.="VALUES('{$the_project_id}','$the_user_id','{$action_detail}',now())";
     $select_user=mysqli_query($connection,$query);
+
+    if($select_user){
+        $_SESSION["success"][]='İşlem eklendi';
+    }
 }
 else
 {?>
     <script>alert('Lütfen gerekli alanları doldurunuz');</script>
 <?php }
-}  
-?>
-<!DOCTYPE html>
-<?php
-require_once "../helps.php";
-// if(!$_SESSION["isLogin"]){
-//   die("You must login");
-// }
-?>
-<html lang="en">
+} ?>
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -54,7 +52,7 @@ require_once "../helps.php";
   <link href="../assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- Font Awesome Icons -->
-  <scrip src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- CSS Files -->
@@ -69,6 +67,13 @@ require_once "../helps.php";
     <!-- Navbar -->
 <?php include "../includes/navbar.php"; ?>
     <!-- End Navbar -->
+      <?php if (isset($_SESSION["success"])) { ?>
+          <div style="background: greenyellow;">
+              <?php
+              echo implode("<br />", $_SESSION["success"]);
+              unset($_SESSION["success"]); ?>
+          </div>
+      <?php } ?>
     <div class="container-fluid py-4">
       <div class="row">
       </div>
@@ -100,7 +105,6 @@ require_once "../helps.php";
                   </div>
                 </div>
               </div>
-      <?php include "../includes/footer.php"; ?>
   </main>
   <!-- Navbar Ayarları -->
   <?php include "../includes/navbar_settings.php"; ?>

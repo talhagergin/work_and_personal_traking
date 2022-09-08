@@ -142,13 +142,11 @@ require_once "../helps.php";
                         <label for="project_name" style="font-size: 20px;">Proje Açıklaması</label>
                         <textarea id="project_description" class="form-control"  name="project_description" rows="4" cols="50" placeholder="Proje Açıklama" style="border:1px solid gray ;"><?= $project_description;?></textarea>
                       </div>
-                      <button type="submit" name="save_project" class="btn btn-primary mr-2">Submit</button>
-                      <button class="btn btn-dark">Cancel</button>
+                      <button type="submit" name="save_project" class="btn btn-primary mr-2">Kaydet</button>
                     </form>
                   </div>
                 </div>
               </div>
-      <?php include "../includes/footer.php"; ?>
     </div>
   </main>
   <!-- Navbar Ayarları -->

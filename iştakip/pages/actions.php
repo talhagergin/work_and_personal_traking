@@ -20,20 +20,21 @@ if(isset($_GET['p_id'])){
     INNER JOIN projects p ON a.project_id=p.project_id  WHERE a.project_id=$the_project_id ORDER BY a.action_date DESC";
     $action_info=mysqli_query($connection,$query)->fetch_all(MYSQLI_ASSOC);
 }
-else{
-    $isGet=false;
-    if($_SESSION['user_role']==1){
-        $query= "SELECT * FROM actions a INNER JOIN users u ON a.user_id=u.user_id
+else {
+    $isGet = false;
+    if ($_SESSION['user_role'] == 1) {
+        $query = "SELECT * FROM actions a INNER JOIN users u ON a.user_id=u.user_id
         INNER JOIN projects p ON a.project_id=p.project_id ORDER BY a.action_date DESC";
-        $action_info=mysqli_query($connection,$query)->fetch_all(MYSQLI_ASSOC);
-    }
-    $query= "SELECT * FROM actions a INNER JOIN users u ON a.user_id=u.user_id
+        $action_info = mysqli_query($connection, $query)->fetch_all(MYSQLI_ASSOC);
+
+    } else {
+        $query = "SELECT * FROM actions a INNER JOIN users u ON a.user_id=u.user_id
     INNER JOIN projects p ON a.project_id=p.project_id 
         WHERE a.user_id={$_SESSION['user_id']} 
        ORDER BY a.action_date DESC";
-    $action_info=mysqli_query($connection,$query)->fetch_all(MYSQLI_ASSOC);
+    }
+    $action_info = mysqli_query($connection, $query)->fetch_all(MYSQLI_ASSOC);
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -152,9 +153,9 @@ else{
          
         </div>
       </div>
-      <?php include "../includes/footer.php"; ?>
     </div>
   </main>
+
   <?php include "../includes/navbar_settings.php"; ?>
   <!--   Core JS Files   -->
   <script src="../assets/js/core/popper.min.js"></script>
@@ -172,7 +173,6 @@ else{
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
-  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../assets/js/material-dashboard.min.js?v=3.0.4"></script>
   <script
   src="https://code.jquery.com/jquery-3.6.0.min.js"
