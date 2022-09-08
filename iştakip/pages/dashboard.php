@@ -80,9 +80,10 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id =" .$_SES
                             AND projects.user_id LIKE '%\"{$_SESSION['user_id']}\"%'";
                             $select_actions=mysqli_query($connection,$query5)->fetch_column(0);
                         }
+                       
                         else
                         {
-                            //users
+                            //admin
                             $query2="SELECT COUNT(*) FROM users";
                             $select_users=mysqli_query($connection,$query2)->fetch_column(0);
 

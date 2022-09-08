@@ -36,27 +36,27 @@ if(!$projects)
     die("You must login");
 } 
 
-if($_SERVER["REQUEST_METHOD"] == "POST")
-{
-    $query="UPDATE projects SET 
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['user_id'])) {
+
+
+        $query = "UPDATE projects SET 
     project_name= '{$_POST["project_name"]} ',
     project_status='{$_POST["project_status"]} ',
     project_start_date='{$_POST["project_start_date"]} ',
     project_finish_date='{$_POST["project_finish_date"]} ',
     project_description='{$_POST["project_description"]} ',
-    user_id= '".json_encode($_POST["user_id"]). "'
+    user_id= '" . json_encode($_POST["user_id"]) . "'
     WHERE project_id='{$the_project_id}'";
-    $update_project=mysqli_query($connection,$query);
+        $update_project = mysqli_query($connection, $query);
 
-    header("Location: {$_SERVER["PHP_SELF"]}?p_id={$the_project_id}");
+        header("Location: {$_SERVER["PHP_SELF"]}?p_id={$the_project_id}");
+    }
 }
 ?>
 <!DOCTYPE html>
 <?php
 require_once "../helps.php";
-// if(!$_SESSION["isLogin"]){
-//   die("You must login");
-// }
 ?>
 <html lang="en">
 
@@ -127,16 +127,19 @@ require_once "../helps.php";
                       </div>
                       <div class="form-group">
                         <label for="project_status"style="font-size: 20px;">Projeden Sorumlu Kişiler</label><br>
-                       
-                        <?php 
-                        $query="SELECT username, user_id FROM users"; 
-                        $select_users=mysqli_query($connection, $query)->fetch_all(MYSQLI_ASSOC);
-                        ?>
-                        <select name="user_id[]" class="form-control" multiple="multiple">
-                            <?php foreach($select_users as $select_user) { ?>
-                            <option value="<?=$select_user['user_id']?>" <?= in_array($select_user['user_id'], $user_id) ? 'selected' : ''; ?>><?=$select_user['username']?></option>
-                            <?php } ?>
-                        </select>
+                          <tbody>
+                          <?php
+                          $query="SELECT * FROM users";
+                          $select_users=mysqli_query($connection, $query)->fetch_all(MYSQLI_ASSOC);
+                          foreach ($select_users as $user){?>
+                          <tr>
+                              <td>
+                                  <input class="checkBoxes" type="checkbox" name="user_id[]" value="<?= $user["user_id"]; ?>" <?= in_array($user['user_id'], $user_id) ? 'checked' : ''; ?>  />
+                              </td>
+                              <td><?= $user["user_firstname"]." ".$user["user_lastname"]; ?></td>
+                          </tr>
+                          </tbody>
+                          <?php }?>
                       </div>
                       <div class="form-group mb-3">
                         <label for="project_name" style="font-size: 20px;">Proje Açıklaması</label>

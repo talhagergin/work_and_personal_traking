@@ -142,6 +142,7 @@ require_once "../helps.php";
                             <select name="user_role" id="user_role" style="border:1px solid gray;border-radius: 5px;" class="form-control">
                                 <option value=0>Personel</option>
                                 <option value=1> Admin</option>
+                                <option value=2> Müşteri</option>
                             </select>
                         </div>
                         <div class="form-group"style="margin-bottom: 10px; margin-top: 10px;">
