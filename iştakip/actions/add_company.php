@@ -1,8 +1,8 @@
 <?php 
 session_start();
-include ("../includes/db.php"); 
-
-if(!isset($_SESSION["user_id"]))
+include ("../includes/db.php");
+require_once "../helps.php";
+if(!isset($_SESSION["user_id"]) || $_SESSION['user_role']==2 )
 {
   header("Location: ../pages/sign-in.php");
   exit();
@@ -40,14 +40,7 @@ else
 }  
 ?>
 <!DOCTYPE html>
-<?php
-require_once "../helps.php";
-// if(!$_SESSION["isLogin"]){
-//   die("You must login");
-// }
-?>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">

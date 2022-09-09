@@ -141,6 +141,7 @@ else{
                 </div>
               </div>
             </div>
+              <?php if($_SESSION['user_role']!=2){?>
             <div class="col-12 col-xl-4">
               <div class="card card-plain h-100">
                 <div class="card-header pb-0 p-3">
@@ -148,8 +149,8 @@ else{
                 </div>
                 <div class="card-body p-3">
                   <ul class="list-group">
-                  <?php 
-                  //Get project where user id 
+                  <?php
+                  //Get project where user id
                   $query="SELECT * FROM projects WHERE user_id LIKE '%\"$the_user_id\"%'";
                   $select_projects=mysqli_query($connection,$query);
                   foreach($select_projects as $project){
@@ -164,12 +165,13 @@ else{
                         <a class="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"><?=$project["project_status"];?></a>
                     </li>
 
-                  <?php }}?>
-                   
+                  <?php }}}?>
+
                   </ul>
                 </div>
               </div>
             </div>
+
             <div class="col-12 mt-4">
           </div>
         </div>

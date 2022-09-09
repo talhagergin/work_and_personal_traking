@@ -19,7 +19,7 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id = " . $_S
 if(isset($_GET['personal_id']))
 {
   $the_user_id = $_GET['personal_id'];
-  if($_SESSION['user_role']== 0)
+  if($_SESSION['user_role']== 0 || $_SESSION['user_role']==2)
   {
       if ($the_user_id != $_SESSION['user_id'])
       {

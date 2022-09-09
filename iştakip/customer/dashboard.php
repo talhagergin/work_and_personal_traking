@@ -10,8 +10,9 @@ if(!isset($_SESSION["user_id"]))
     header("Location: ../pages/sign-in.php");
     exit();
 }
-if($_SESSION['user_role']==2){
-    header("Location: ../customer/dashboard.php");
+if($_SESSION['user_role']!=2)
+{
+    header("Location: ../pages/dashboard.php");
     exit();
 }
 $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id =" .$_SESSION['user_id'])->fetch_assoc();
@@ -68,23 +69,6 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id =" .$_SES
 
                         $query6="SELECT COUNT(*) FROM projects WHERE DATE_FORMAT(project_start_date, '%Y-%m-%d') = '" .date("Y-m-d", time()). "'";
 
-
-                        if($_SESSION["user_role"] == 0)
-                        {
-                            $projeYetkiEk = "AND user_id LIKE '%\"{$_SESSION['user_id']}\"%'";
-                            $query1 .= $projeYetkiEk;
-                            $query4 .= $projeYetkiEk;
-                            $query6 .= $projeYetkiEk;
-
-                            //işlemler
-                            $query5="SELECT COUNT(*) FROM actions
-                            INNER JOIN projects ON projects.project_id = actions.project_id 
-                            WHERE DATE_FORMAT(actions.action_date, '%Y-%m-%d') = '" . date("Y-m-d", time()) . "'
-                            AND projects.user_id LIKE '%\"{$_SESSION['user_id']}\"%'";
-                            $select_actions=mysqli_query($connection,$query5)->fetch_column(0);
-                        }
-                        else if($_SESSION['user_role']==2){
-                            //customer
                             $select_customer=mysqli_query($connection,"SELECT * FROM customers")->fetch_all(MYSQLI_ASSOC);
                             foreach ($select_customer as $customer) {
                                 $projeYetkiEk = "AND company_id ='{$customer['company_id']}'";
@@ -92,27 +76,7 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id =" .$_SES
                                 $query4 .= $projeYetkiEk;
                                 $query6 .= $projeYetkiEk;
                             }
-                        }
-                        else
-                        {
-                            //admin
-                            $query2="SELECT COUNT(*) FROM users";
-                            $select_users=mysqli_query($connection,$query2)->fetch_column(0);
 
-                            $query8="SELECT COUNT(*) FROM users WHERE DATE_FORMAT(added_date, '%Y-%m-%d') = '" .date("Y-m-d", time()). "'";
-                            $select_user_new=mysqli_query($connection,$query8)->fetch_column(0);
-
-
-                            $query3="SELECT COUNT(*) FROM companies";
-                            $select_companies=mysqli_query($connection,$query3)->fetch_column(0);
-
-                            $query7="SELECT COUNT(*) FROM companies WHERE DATE_FORMAT(company_added_date, '%Y-%m-%d') = '" .date("Y-m-d", time()). "'";
-                            $select_company_new=mysqli_query($connection,$query7)->fetch_column(0);
-
-                            //işlemler
-                            $query5="SELECT COUNT(*) FROM actions WHERE DATE_FORMAT(action_date, '%Y-%m-%d') = '" . date("Y-m-d", time()) . "'";
-                            $select_actions=mysqli_query($connection,$query5)->fetch_column(0);
-                        }
                         $select_project=mysqli_query($connection,$query1)->fetch_column(0);
 
                         $select_fproject=mysqli_query($connection,$query4)->fetch_column(0);
@@ -128,68 +92,12 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id =" .$_SES
                     </div>
                     <hr class="dark horizontal my-0">
                     <div class="card-footer p-3">
-                        <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><?=$select_project_new;?> Yeni <a href="../pages/projects.php">Proje</a> </span></p>
+                        <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><?=$select_project_new;?> Yeni <a href="../customer/projects.php">Proje</a> </span></p>
                     </div>
                 </div>
             </div>
-            <?php if ($_SESSION["user_role"] == 1) { ?>
-            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                <div class="card">
-                    <div class="card-header p-3 pt-2">
-                        <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
-                            <i class="material-icons opacity-10">store</i>
-                        </div>
-                        <div class="text-end pt-1">
-                            <p class="text-sm mb-0 text-capitalize">Müşteriler</p>
-                            <h4 class="mb-0"><?=$select_companies;?></h4>
-                        </div>
-                    </div>
-                    <hr class="dark horizontal my-0">
-                    <div class="card-footer p-3">
-                        <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><?=$select_company_new ;?> Yeni <a href="../pages/firmalar.php">Müşteri</a></span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                <div class="card">
-                    <div class="card-header p-3 pt-2">
-                        <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
-                            <i class="material-icons opacity-10">engineering</i>
-                        </div>
-                        <div class="text-end pt-1">
-                            <p class="text-sm mb-0 text-capitalize">Personeller</p>
-                            <h4 class="mb-0"><?=$select_users;?></h4>
 
-                        </div>
-                    </div>
-                    <hr class="dark horizontal my-0">
-                    <div class="card-footer p-3">
-                        <p class="mb-0"><span class="text-danger text-sm font-weight-bolder"><?=$select_user_new ;?> Yeni <a href="../pages/kullanıcılar.php">Personel</a></span></p>
 
-                    </div>
-                </div>
-            </div>
-            <?php }
-            if($_SESSION['user_role']!= 2){?>
-            <div class="col-xl-3 col-sm-6">
-                <div class="card">
-                    <div class="card-header p-3 pt-2">
-                        <div class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
-                            <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
-                        </div>
-                        <div class="text-end pt-1">
-                            <p class="text-sm mb-0 text-capitalize">Yapılan İşlem Sayısı</p>
-                            <h4 class="mb-0"><?=$select_actions;?></h4>
-                        </div>
-                    </div>
-                    <hr class="dark horizontal my-0">
-                    <div class="card-footer p-3">
-                        <p class="mb-0"><span class="text-success text-sm font-weight-bolder"><a href="../pages/actions.php">Günlük Yapıılan İşlem Sayısı</a></span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-<?php }?>
 
         <div class="row mt-5">
             <!-- Proje Takip Tablosu Başlangıç-->
@@ -222,29 +130,25 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id =" .$_SES
                                 </thead>
                                 <tbody>
                                 <?php
-                                $query="SELECT * FROM projects p INNER JOIN companies c on p.company_id = c.company_id";
-                                if($_SESSION["user_role"] == 0)
-                                {
-                                    #user
-                                    $query .= " WHERE p.user_id LIKE '%\"{$_SESSION['user_id']}\"%'";
-                                }
+                                $query="SELECT * FROM projects p INNER JOIN companies c on p.company_id = c.company_id
+                                            WHERE p.company_id='{$customer['company_id']}'";
+
 
                                 $projects=mysqli_query($connection,$query)->fetch_all(MYSQLI_ASSOC);
 
-                                foreach($projects as $project)
-                                {
+                                foreach($projects as $project){
                                 $user_id=json_decode($project['user_id']);
                                 ?>
                                 <tr>
                                     <td>
                                         <div class="d-flex flex-column justify-content-center">
-                                            <h6 class="mb-0 text-sm"><a href="../pages/firmalar.php?comp_id=<?=$project["company_id"];?>"><?=$project["company_name"];?></a></h6>
+                                            <h6 class="mb-0 text-sm"><a href="#"><?=$project["company_name"];?></a></h6>
                                         </div>
                         </div>
                         </td>
                         <td>
                             <div class="d-flex flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm"><a href="../pages/projects.php?project_id=<?=$project["project_id"];?>"><?=$project["project_name"];?></a></h6>
+                                <h6 class="mb-0 text-sm"><a href="#"><?=$project["project_name"];?></a></h6>
                             </div>
                     </div>
                     </td>
@@ -257,7 +161,7 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id =" .$_SES
 
                             foreach($projePersonelleri as $projePersoneli) { ?>
                                 <div class="avatar-group mt-2" style="float:left";>
-                                    <a href="../pages/profile.php?user_id=<?=$projePersoneli["user_id"];?>" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="<?=$projePersoneli["username"] ;?>">
+                                    <a href="#" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="<?=$projePersoneli["username"] ;?>">
                                         <img src="../assets/img/user_image/<?=$projePersoneli["user_image"];?>" alt="">
                                     </a>
                                 </div>
@@ -577,9 +481,9 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id =" .$_SES
 <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="../assets/js/material-dashboard.min.js?v=3.0.4"></script>
 <script
-        src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-        crossorigin="anonymous"></script>
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"></script>
 
 <script>
     $('#menu-dashboard').addClass('active bg-gradient-primary');

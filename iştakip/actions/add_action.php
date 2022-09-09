@@ -3,7 +3,7 @@ session_start();
 require_once "../helps.php";
 include ("../includes/db.php"); 
 
-if(!isset($_SESSION["user_id"]))
+if(!isset($_SESSION["user_id"]) || $_SESSION['user_role']==2 )
 {
   header("Location: ../pages/sign-in.php");
   exit();

@@ -16,15 +16,28 @@
             <span class="nav-link-text ms-1">Ana Sayfa</span>
           </a>
         </li>
+          <?php if($_SESSION['user_role']==2){?>
         <li class="nav-item">
-          <a id="menu-projeler" class="nav-link text-white " href="<?= url('pages/projects.php'); ?>">
+          <a id="menu-projeler" class="nav-link text-white " href="<?= url('customer/projects.php'); ?>">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">table_view</i>
             </div>
-            <span class="nav-link-text ms-1">Projeler</span>
+            <span class="nav-link-text ms-1">Projelerim</span>
           </a>
         </li>
-          <?php if($_SESSION['user_role']==1){ ?>
+          <?php }
+          else{?>
+
+          <li class="nav-item">
+              <a id="menu-projeler" class="nav-link text-white " href="<?= url('pages/projects.php'); ?>">
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                      <i class="material-icons opacity-10">table_view</i>
+                  </div>
+                  <span class="nav-link-text ms-1">Projeler</span>
+              </a>
+          </li>
+          <?php }
+          if($_SESSION['user_role']==1){ ?>
         <li class="nav-item">
           <a id="menu-kullanıcılar" class="nav-link text-white " href="<?= url('pages/kullanıcılar.php'); ?>">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -59,7 +72,19 @@
             <span class="nav-link-text ms-1">Görevlerim</span>
           </a>
         </li>
-          <?php } ?>
+          <?php }
+          if($_SESSION['user_role']==2){?>
+          <li class="nav-item">
+              <a id="menu-actions" class="nav-link text-white " href="../customer/actions.php">
+                  <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                      <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
+                  </div>
+                  <span class="nav-link-text ms-1">İşlemler</span>
+              </a>
+          </li>
+          <?php }
+          else{?>
+
           <li class="nav-item">
               <a id="menu-actions" class="nav-link text-white " href="../pages/actions.php">
                   <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -68,7 +93,7 @@
                   <span class="nav-link-text ms-1">İşlemler</span>
               </a>
           </li>
-
+<?php } ?>
         <!-- <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Account pages</h6>
         </li> -->

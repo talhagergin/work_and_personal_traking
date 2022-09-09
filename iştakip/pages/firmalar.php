@@ -33,7 +33,9 @@ else{
 if(isset($_GET['delete'])){
   $the_company_id = $_GET['delete'];
   $query= "DELETE FROM companies WHERE company_id = $the_company_id";
+  $query2="DELETE FROM customers WHERE company_id=$the_company_id";
   $delete_query=mysqli_query($connection,$query);
+  $delete_query2=mysqli_query($connection,$query2);
 }
 
 ?>

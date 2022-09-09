@@ -1,8 +1,8 @@
 <?php
 session_start();
-include "../includes/db.php";
 require_once "../helps.php";
-$breadcrumb = "Görevler";
+include "../includes/db.php";
+$breadcrumb = "İşlemler";
 
 if(!isset($_SESSION["user_id"]))
 {
@@ -11,37 +11,16 @@ if(!isset($_SESSION["user_id"]))
 }
 
 $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id = " . $_SESSION['user_id'])->fetch_assoc();
+$customer =mysqli_query($connection,"SELECT * FROM customers WHERE user_id= ".$_SESSION['user_id'])->fetch_assoc();
+$the_company_id=$customer['company_id'];
 
-//user
-if(isset($_GET['user_id']))
-{
-    $query="SELECT * FROM missions m
-         INNER JOIN projects p ON m.project_id=p.project_id
-         INNER JOIN users u ON m.user_id=u.user_id
-         WHERE m.user_id={$_SESSION['user_id']}";
-}
-//admin
-else{
-    $query="SELECT * FROM missions m
-        INNER JOIN projects p ON m.project_id=p.project_id
-         INNER JOIN users u ON m.user_id=u.user_id";
-}
-if($_SESSION['user_role']==0){
-    $query="SELECT * FROM missions m
-         INNER JOIN projects p ON m.project_id=p.project_id
-         INNER JOIN users u ON m.user_id=u.user_id
-         WHERE m.user_id={$_SESSION['user_id']}
-         ORDER BY m.mis_finish_date DESC, m.mis_start_date DESC, p.project_name";
-}
-$select_missions=mysqli_query($connection,$query)->fetch_all(MYSQLI_ASSOC);
+    $query= "SELECT * FROM  customers c INNER JOIN users u ON c.user_id=u.user_id
+         INNER JOIN projects p ON p.company_id=c.company_id 
+         INNER JOIN actions a ON a.project_id =p.project_id
+         WHERE p.company_id=$the_company_id 
+        ORDER BY p.project_name  and a.action_date DESC";
+    $action_info=mysqli_query($connection,$query)->fetch_all(MYSQLI_ASSOC);
 
-
-//DELETE
-if(isset($_GET['delete'])){
-    $the_mis_id = $_GET['delete'];
-    $query= "DELETE FROM missions WHERE mis_id = $the_mis_id";
-    $delete_query2=mysqli_query($connection,$query);
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -76,20 +55,11 @@ if(isset($_GET['delete'])){
     <!-- End Navbar -->
     <div class="container-fluid py-4">
         <div class="row">
-            <?php
-            if(isset($_SESSION["success"])) { ?>
-                <div class="alert alert-success" role="alert">
-                    <?php
-                    echo implode("<br />", $_SESSION["success"]);
-                    unset($_SESSION["success"]);
-                    ?>
-                </div>
-            <?php } ?>
             <div class="col-12">
                 <div class="card my-4">
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                         <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                            <h6 class="text-white text-capitalize ps-3">Görevler</h6>
+                            <h6 class="text-white text-capitalize ps-3">İşlemler</h6>
                         </div>
                     </div>
                     <div class="card-body px-0 pb-2">
@@ -100,81 +70,64 @@ if(isset($_GET['delete'])){
                                 <tr>
                                     <th class="text-uppercase text-secondary text-s font-weight-bolder opacity-7">Proje Ad</th>
                                     <th class="text-uppercase text-secondary text-s font-weight-bolder opacity-7 ps-2">Kullanıcı Ad</th>
-                                    <th class="text-uppercase text-secondary text-s font-weight-bolder opacity-7 ps-2">Verilen Görev</th>
-                                    <th class="text-uppercase text-secondary text-s font-weight-bolder opacity-7 ps-2">Başlangıç Tarihi</th>
-                                    <th class="text-uppercase text-secondary text-s font-weight-bolder opacity-7 ps-2">Bitiş Tarihi</th>
+                                    <th class="text-uppercase text-secondary text-s font-weight-bolder opacity-7 ps-2">Yapılan İşlem</th>
+                                    <th class="text-uppercase text-secondary text-s font-weight-bolder opacity-7 ps-2">İşlem Tarihi</th>
                                     <th class="text-uppercase text-secondary text-s font-weight-bolder opacity-7 ps-2">Detay Göster</th>
-                                <?php if($_SESSION['user_role']==1){?>
-                                    <th class="text-uppercase text-secondary text-s font-weight-bolder opacity-7 ps-2"></th>
-                                <?php } ?>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <?php
 
-                                foreach($select_missions as $mission){
+                                foreach($action_info as $action){
+                                    $the_action_id=$action["action_id"];
                                     ?>
                                     <tr>
                                         <td>
                                             <div class="d-flex px-2 py-1">
                                                 <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm"><?= $mission["project_name"];?></h6>
+                                                    <h6 class="mb-0 text-sm"><?= $action["project_name"];?></h6>
                                                 </div>
                                             </div>
                                         </td>
                                         <div class="d-flex flex-column justify-content-center">
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0"><?=$mission['username'];?></p>
-                                            </td>
-                                        </div>
-
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0"><?=substr($mission['mission_detail'],0,30);?></p>
+                                                <p class="text-xs font-weight-bold mb-0"><?=$action['username'];?></p>
                                             </td>
                                         </div>
                                         <div class="d-flex flex-column justify-content-center">
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-center">
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0"><?=date('d.m.Y',strtotime($mission["mis_start_date"]));?></p>
+                                                <p class="text-xs font-weight-bold mb-0"><?=substr($action['action_detail'],0,30);?></p>
                                             </td>
                                         </div>
                                         <div class="d-flex flex-column justify-content-center">
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0"><?=date('d.m.Y',strtotime($mission["mis_finish_date"]));?></p>
+                                                <p class="text-xs font-weight-bold mb-0"><?=date('d.m.Y',strtotime($action["action_date"]));?></p>
                                             </td>
                                         </div>
-                                        
                                         <td>
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detay-<?= $mission["mis_id"]; ?>">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detay-<?= $action["action_id"]; ?>">
                                                 Detay Göster
                                             </button>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="detay-<?= $mission["mis_id"]; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="detay-<?= $action["action_id"]; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel"><?= $mission["mis_id"]; ?> - Görev Detay</h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel"><?= $action["action_id"]; ?> - İşlem Detay</h5>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <?= $mission['mission_detail']; ?>
+                                                            <?= $action['action_detail']; ?>
                                                         </div>
-
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <?php if($_SESSION['user_role']==1){?>
-                                        <td class="align-middle">
-                                            <button style="margin-right:5px; border-radius:5px;" title="Sil">
-                                                <a onclick="javascript:return confirm('Görevi silmek istediğinizden emin misiniz?');" href="missions.php?delete=<?= $mission["mis_id"]; ?>"><i class="fa fa-solid fa-trash"></i></a>
-                                            </button>
-                                        </td>
-                                        <?php }?>
                                         </td>
                                     </tr>
                                 <?php  } ?>
@@ -206,14 +159,13 @@ if(isset($_GET['delete'])){
 </script>
 <!-- Github buttons -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
-<!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="../assets/js/material-dashboard.min.js?v=3.0.4"></script>
 <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
     crossorigin="anonymous"></script>
 <script>
-    $('#menu-missions').addClass('active bg-gradient-primary');
+    $('#menu-actions').addClass('active bg-gradient-primary');
 
     $(document).ready(function() {
         var myModal = document.getElementById('myModal')
@@ -226,4 +178,5 @@ if(isset($_GET['delete'])){
 </script>
 </body>
 
+</html>
 </html>

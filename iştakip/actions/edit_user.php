@@ -1,8 +1,8 @@
 <?php 
 session_start();
-include ("../includes/db.php");  
-
-if(!isset($_SESSION["user_id"]))
+include ("../includes/db.php");
+require_once "../helps.php";
+if(!isset($_SESSION["user_id"]) )
 {
   header("Location: ../pages/sign-in.php");
   exit();
@@ -15,7 +15,7 @@ if(isset($_GET['user_id'])){
     $the_user_id= $_GET['user_id'];
     //kullanıcı başkasını düzenlemeye çalıştığında
     if($the_user_id != $_SESSION['user_id']) {
-        if ($_SESSION['user_role'] == 0) {
+        if ($_SESSION['user_role'] == 0 || $_SESSION['user_role']==2) {
             header("Location: ../pages/dashboard.php");
             exit();
         }
@@ -29,6 +29,13 @@ if(isset($_GET['user_id'])){
     else
     {
         $query = "SELECT * FROM users WHERE user_id={$the_user_id}";
+
+        if($_SESSION['user_role']==2){
+            $query = "SELECT * FROM users u 
+                    INNER JOIN customers c ON u.user_id=c.user_id
+                    INNER JOIN companies co ON co.company_id=c.company_id
+                    WHERE u.user_id={$the_user_id}";
+        }
         $users = mysqli_query($connection, $query)->fetch_assoc();
         $user_image = $users['user_image'];
     }
@@ -41,6 +48,12 @@ if(isset($_GET['user_id'])){
             move_uploaded_file($user_image_temp,"../assets/img/user_image/$user_image");
         }
 
+        if($_SESSION['user_role']==2){
+            $user_role=2;
+        }
+        else{
+            $user_role=$_POST['user_role'];
+        }
         $query="UPDATE users SET 
         username= '{$_POST["username"]} ',
         user_firstname='{$_POST["name"]}',
@@ -48,24 +61,27 @@ if(isset($_GET['user_id'])){
         user_email='{$_POST["email"]} ',
         user_phone='{$_POST["phone"]} ',
         user_password='{$_POST["password"]} ',
-        user_role='{$_POST["user_role"]}',
+        user_role='{$user_role}',
         user_image ='{$user_image}' 
         WHERE user_id='{$the_user_id}'";
         $update_user=mysqli_query($connection,$query);
 
+
+        if($_SESSION['user_role']==2){
+            $query="UPDATE companies SET 
+        company_name= '{$_POST["firma_ad"]} ',
+        company_adress='{$_POST["firma_adres"]} ',
+        company_phone='{$_POST["firma_telefon"]} ',
+        company_email='{$_POST["firma_eposta"]} '
+        WHERE company_id='{$users['company_id']}'";
+            $update_company=mysqli_query($connection,$query);
+        }
         header("Location: {$_SERVER["PHP_SELF"]}?user_id={$the_user_id}");
     }
 }   
 ?>
 <!DOCTYPE html>
-<?php
-require_once "../helps.php";
-// if(!$_SESSION["isLogin"]){
-//   die("You must login");
-// }
-?>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -127,10 +143,12 @@ require_once "../helps.php";
                         <input type="text" class="form-control" id="user_phone" placeholder="Telefon" name="phone" value="<?=$users['user_phone']?>"style="border:1px solid gray">
                       </div>
                       <div class="form-group">
-                        <label for="project_status"style="font-size: 20px;">Kullanıcı Tipi</label>
-                        <select name="user_role" id="project_status" style="border:1px solid gray;border-radius: 5px;" class="form-control">
+                        <label for="project_status" style="font-size: 20px;">Kullanıcı Tipi</label>
+                        <select name="user_role" id="user_type" style="border:1px solid gray;border-radius: 5px;" class="form-control" <?= $users['user_role']==2 ? 'disabled' : ''; ?>>
                             <option value=0 <?=  $users['user_role'] == 0 ? 'selected' : ''; ?>>Personel</option>
                             <option value=1 <?= $users['user_role'] == 1 ? 'selected' : ''; ?>> Admin</option>
+                            <option value=2 <?= $users['user_role'] == 2 ? 'selected' : ''; ?>> Müşteri</option>
+
                         </select>
                       </div>
                       <div class="form-group">
@@ -142,6 +160,24 @@ require_once "../helps.php";
                           <img class="form-control max-width-200" src="../assets/img/user_image/<?=$users['user_image'];?>" alt="">
                         <input type="file" name="image" class="file-upload-default">
                       </div>
+                        <div id="firma_form">
+                            <div class="form-group">
+                                <label for="company_name"style="font-size: 20px;">Firma Ad</label>
+                                <input type="text" class="form-control" id="firma_ad"  name="firma_ad" value="<?=$users['company_name']?>"style="border:1px solid gray">
+                            </div>
+                            <div class="form-group">
+                                <label for="company_name"style="font-size: 20px;">Firma Adres</label>
+                                <input type="text" class="form-control" id="firma_adres"  name="firma_adres" value="<?=$users['company_adress']?>"style="border:1px solid gray">
+                            </div>
+                            <div class="form-group">
+                                <label for="company_name"style="font-size: 20px;">Firma Telefon</label>
+                                <input type="text" class="form-control" id="firma_telefon"  name="firma_telefon" value="<?=$users['company_phone']?>"style="border:1px solid gray">
+                            </div>
+                            <div class="form-group">
+                                <label for="company_name"style="font-size: 20px;">Firma Eposta</label>
+                                <input type="text" class="form-control" id="firma_eposta" name="firma_eposta" value="<?=$users['company_email']?>"style="border:1px solid gray">
+                            </div>
+                        </div>
                       <button type="submit" name="save_user" class="btn btn-primary mb-5 mt-3">Kaydet</button>
                     </form>
                   </div>
@@ -175,6 +211,23 @@ require_once "../helps.php";
   crossorigin="anonymous"></script>
   <script>
     $('#menu-kullanıcılar').addClass('active bg-gradient-primary');
+
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+        document.getElementById("firma_form").style.display = "none";
+    });
+
+    var userRole = document.getElementById("user_role");
+    userRole.addEventListener("change", function () {
+        if(userRole.value == 2)
+        {
+            document.getElementById("firma_form").style.display = "block";
+        }
+        else
+        {
+            document.getElementById("firma_form").style.display = "none";
+        }
+    });
   </script>
 </body>
 
