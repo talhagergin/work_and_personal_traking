@@ -9,7 +9,7 @@ if(!isset($_SESSION["user_id"]))
   header("Location: ../pages/sign-in.php");
   exit();
 }
-if($_SESSION["user_role"]==0)
+if($_SESSION["user_role"]==0 || $_SESSION['user_role']==2)
 {
     header("Location: ../pages/dashboard.php");
     exit();
@@ -33,7 +33,9 @@ else{
 if(isset($_GET['delete'])){
   $the_company_id = $_GET['delete'];
   $query= "DELETE FROM companies WHERE company_id = $the_company_id";
+  $query2="DELETE FROM customers WHERE company_id=$the_company_id";
   $delete_query=mysqli_query($connection,$query);
+  $delete_query2=mysqli_query($connection,$query2);
 }
 
 ?>
@@ -71,7 +73,24 @@ if(isset($_GET['delete'])){
     <div class="container-fluid py-4">
       <div class="row">
         <div class="col-12">
-          <div class="card my-4">             
+          <div class="card my-4">
+              <?php
+              if(isset($_SESSION["errors"])) { ?>
+                  <div class="alert alert-danger" role="alert">
+                      <?php
+                      echo implode("<br />", $_SESSION["errors"]);
+                      unset($_SESSION["errors"]);
+                      ?>
+                  </div>
+              <?php }
+              if(isset($_SESSION["success"])) { ?>
+                  <div class="alert alert-primary" role="alert">
+                      <?php
+                      echo implode("<br />", $_SESSION["success"]);
+                      unset($_SESSION["success"]);
+                      ?>
+                  </div>
+              <?php } ?>
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
                 <h6 class="text-white text-capitalize ps-3">Firmalar</h6>

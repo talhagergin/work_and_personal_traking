@@ -1,8 +1,8 @@
 <?php 
 session_start();
-include ("../includes/db.php"); 
-
-if(!isset($_SESSION["user_id"]))
+include ("../includes/db.php");
+require_once "../helps.php";
+if(!isset($_SESSION["user_id"]) || $_SESSION['user_role']==2 )
 {
   header("Location: ../pages/sign-in.php");
   exit();
@@ -25,13 +25,26 @@ if(!empty($_POST['company_name']) && !empty($_POST['company_adress']) && !empty(
     $company_adress=$_POST['company_adress'];
     $company_phone=$_POST['company_phone'];
     $company_email=$_POST['company_email'];
+    $company_password=$_POST['company_password'];
     $query="INSERT INTO companies (company_name,company_adress,company_phone,company_email,company_added_date) ";
     $query.="VALUES('{$company_name}','{$company_adress}','{$company_phone}','{$company_email}',now())";
     $added_company=mysqli_query($connection,$query);
-    if($added_company){
-      "<script>alert('Firma Eklendi')</script>";
+    $query2="INSERT INTO users (username,user_email,user_phone,user_password,user_role,added_date) ";
+    $query2 .= "VALUES ('{$company_name}','{$company_email}','{$company_phone}','{$company_password}','2',now())";
+    $added_user=mysqli_query($connection,$query2);
+    if($added_company && $added_user){
+      $_SESSION["success"][]="Firma başarıyla eklendi";
       header("Location: ../pages/dashboard.php");
     }
+    else{
+        $_SESSION["errors"][]="Firma eklenemedi!";
+        header("Location: ../pages/firmalar.php");
+    }
+    //customer tablosuna ekleme işlemi
+    $get_customer_user=mysqli_query($connection,"SELECT * FROM users ORDER BY user_id DESC LIMIT 1")->fetch_assoc();
+    $get_customer_company=mysqli_query($connection,"SELECT * FROM companies ORDER BY company_id DESC LIMIT 1")->fetch_assoc();
+    $query1="INSERT INTO customers (user_id,company_id) VALUES ('{$get_customer_user['user_id']}','{$get_customer_company['company_id']}')";
+    $add_customer=mysqli_query($connection,$query1);
 }
 else
 {?>
@@ -40,14 +53,7 @@ else
 }  
 ?>
 <!DOCTYPE html>
-<?php
-require_once "../helps.php";
-// if(!$_SESSION["isLogin"]){
-//   die("You must login");
-// }
-?>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -101,9 +107,13 @@ require_once "../helps.php";
                         <input type="text" class="form-control" id="company_phone" placeholder="Firma Telefon" name="company_phone" style="border:1px solid gray">
                       </div>
                       <div class="form-group mb-3">
-                        <label for="company_name"style="font-size: 20px;">Firma E-Posta</label>
+                        <label for="company_name"style="font-size: 20px;"> E-Posta (Giriş yapmak için gereklidir)</label>
                         <input type="email" class="form-control" id="company_email" placeholder="Firma E-Posta" name="company_email" style="border:1px solid gray">
                       </div>
+                        <div class="form-group mb-3">
+                            <label for="company_password"style="font-size: 20px;">Giriş Şifresi</label>
+                            <input type="password" class="form-control" id="company_password" placeholder="Firma Şifre" name="company_password" style="border:1px solid gray">
+                        </div>
                       <button type="submit" name="create_user" class="btn btn-primary mb-5">Ekle</button>
                     </form>
                   </div>

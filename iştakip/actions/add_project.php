@@ -3,7 +3,7 @@ session_start();
 include ("../includes/db.php"); 
 
 
-if(!isset($_SESSION["user_id"]))
+if(!isset($_SESSION["user_id"]) || $_SESSION['user_role']==2 )
 {
   header("Location: ../pages/sign-in.php");
   exit();
@@ -115,20 +115,22 @@ require_once "../helps.php";
                         <label for="project_finish_date">Bitiş Tarihi</label>
                         <input type="date" name="project_finish_date" class="form-control" id="project_finish_date" placeholder="Finish Date" style="border:1px solid gray;width:auto;margin-bottom:10px;">
                       </div>
-                      <div class="form-group">
-                        <label for="project_status"style="font-size: 20px;">Projeden Sorumlu Kişiler</label><br>
-                       
-                        <?php 
-                        $query="SELECT username, user_id FROM users"; 
-                        $select_users=mysqli_query($connection, $query)->fetch_all(MYSQLI_ASSOC);
-                        ?>
-                        <select name="user_id[]" class="form-control" multiple="multiple">
-                            <?php foreach($select_users as $select_user) { ?>
-                            <option value="<?=$select_user['user_id']?>"><?=$select_user['username']?></option>
-                            <?php } ?>
-                        </select>  
-                       
-                      </div>
+                        <div class="form-group">
+                            <label for="project_status"style="font-size: 20px;">Projeden Sorumlu Kişiler</label><br>
+                            <tbody>
+                            <?php
+                            $query="SELECT * FROM users";
+                            $select_users=mysqli_query($connection, $query)->fetch_all(MYSQLI_ASSOC);
+                            foreach ($select_users as $user){?>
+                            <tr>
+                                <td>
+                                    <input class="checkBoxes" type="checkbox" name="user_id[]" value="<?= $user["user_id"]; ?>"/>
+                                </td>
+                                <td><?= $user["user_firstname"]." ".$user["user_lastname"]; ?></td>
+                            </tr>
+                            </tbody>
+                            <?php }?>
+                        </div>
                       <div class="form-group mb-3">
                         <label for="project_name" style="font-size: 20px;">Proje Açıklaması</label>
                         <textarea id="project_description" class="form-control" name="project_description" rows="4" cols="50" placeholder="Proje Açıklama" style="border:1px solid gray ;"></textarea>

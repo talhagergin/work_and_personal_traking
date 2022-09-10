@@ -10,6 +10,10 @@ if(!isset($_SESSION["user_id"]))
   header("Location: ../pages/sign-in.php");
   exit();
 }
+if($_SESSION['user_role']==2){
+    header("Location: ../pages/dashboard.php");
+    exit();
+}
 
 $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id = " . $_SESSION['user_id'])->fetch_assoc();
 
@@ -18,8 +22,18 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id = " . $_S
         //DELETE user
         if(isset($_GET['delete'])){
           $the_user_id = $_GET['delete'];
-          $query= "DELETE FROM users WHERE user_id = $the_user_id";
+          $query= "DELETE  FROM users WHERE user_id = $the_user_id";
+          $get_customer=mysqli_query($connection,"SELECT * FROM customers WHERE user_id=$the_user_id")->fetch_assoc();
+          if($get_customer){
+              $delete_customer=mysqli_query($connection,"DELETE FROM customers WHERE user_id=$the_user_id");
+          }
           $delete_query=mysqli_query($connection,$query);
+          if($delete_query){
+              $_SESSION["success"][]="Kullanıcı silindi";
+          }
+          else{
+              $_SESSION["errors"][]="Kullanıcı silinemedi!";
+          }
         }?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,6 +70,23 @@ $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id = " . $_S
         <div class="col-12">
           <div class="card my-4">             
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                <?php
+                if(isset($_SESSION["errors"])) { ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?php
+                        echo implode("<br />", $_SESSION["errors"]);
+                        unset($_SESSION["errors"]);
+                        ?>
+                    </div>
+                <?php }
+                if(isset($_SESSION["success"])) { ?>
+                    <div class="alert alert-primary" role="alert">
+                        <?php
+                        echo implode("<br />", $_SESSION["success"]);
+                        unset($_SESSION["success"]);
+                        ?>
+                    </div>
+                <?php } ?>
               <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
                 <h6 class="text-white text-capitalize ps-3">Personeller</h6>
               </div>

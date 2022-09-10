@@ -24,7 +24,7 @@ if(isset($_GET['user_id']))
         $select_user = mysqli_query($connection, $query)->fetch_assoc();
     }
     else{
-        if($_SESSION['user_role']==0) {
+        if($_SESSION['user_role']==0 || $_SESSION['user_role']==2) {
             header('Location: ../pages/dashboard.php');
             exit();
         }
@@ -101,12 +101,15 @@ else{
           <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
             <div class="nav-wrapper position-relative end-0">
               <ul class="nav nav-pills nav-fill p-1" role="tablist">
-                <li class="nav-item">
-                <a href="../pages/profile.php"><button class="btn btn-dark">Profil</button></a>               
-                </li>
+                <?php if($_SESSION['user_role']==2){?>
+                  <li class="nav-item">
+                      <a href="../customer/projects.php"><button class="btn btn-dark">Projeler</button></a>
+                  </li>
+                  <?php } else{?>
                 <li class="nav-item">
                 <a href="../pages/projects.php?personal_id=<?= $the_user_id;?>"><button class="btn btn-dark">Projeler</button></a>               
                 </li>
+                  <?php } ?>
                 <li class="nav-item">
                 <a href="../actions/edit_user.php?user_id=<?=$the_user_id;?>"><button class="btn btn-dark">Ayarlar</button></a>               
                 </li>
@@ -141,6 +144,7 @@ else{
                 </div>
               </div>
             </div>
+              <?php if($_SESSION['user_role']!=2){?>
             <div class="col-12 col-xl-4">
               <div class="card card-plain h-100">
                 <div class="card-header pb-0 p-3">
@@ -148,8 +152,8 @@ else{
                 </div>
                 <div class="card-body p-3">
                   <ul class="list-group">
-                  <?php 
-                  //Get project where user id 
+                  <?php
+                  //Get project where user id
                   $query="SELECT * FROM projects WHERE user_id LIKE '%\"$the_user_id\"%'";
                   $select_projects=mysqli_query($connection,$query);
                   foreach($select_projects as $project){
@@ -164,12 +168,13 @@ else{
                         <a class="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"><?=$project["project_status"];?></a>
                     </li>
 
-                  <?php }}?>
-                   
+                  <?php }}}?>
+
                   </ul>
                 </div>
               </div>
             </div>
+
             <div class="col-12 mt-4">
           </div>
         </div>

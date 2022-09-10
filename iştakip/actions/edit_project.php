@@ -8,7 +8,7 @@ if(!isset($_SESSION["user_id"]))
   exit();
 }
 
-if($_SESSION['user_role']==0)
+if($_SESSION['user_role']==0 || $_SESSION['user_role']==2)
 {
     header("Location: ../pages/dashboard.php");
     exit();
@@ -129,7 +129,7 @@ require_once "../helps.php";
                         <label for="project_status"style="font-size: 20px;">Projeden Sorumlu Kişiler</label><br>
                           <tbody>
                           <?php
-                          $query="SELECT * FROM users";
+                          $query="SELECT * FROM users WHERE user_role=0";
                           $select_users=mysqli_query($connection, $query)->fetch_all(MYSQLI_ASSOC);
                           foreach ($select_users as $user){?>
                           <tr>

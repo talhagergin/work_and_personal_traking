@@ -9,8 +9,13 @@ if(!isset($_SESSION["user_id"]))
   header("Location: ../pages/sign-in.php");
   exit();
 }
-
+if($_SESSION["user_role"]==2)
+{
+    header("Location: ../pages/dashboard.php");
+    exit();
+}
 $loginUser=mysqli_query($connection,"SELECT * FROM users WHERE user_id = " . $_SESSION['user_id'])->fetch_assoc();
+
 
 $isGet=false;
 if(isset($_GET['p_id'])){
@@ -23,11 +28,13 @@ if(isset($_GET['p_id'])){
 else {
     $isGet = false;
     if ($_SESSION['user_role'] == 1) {
+        #admin
         $query = "SELECT * FROM actions a INNER JOIN users u ON a.user_id=u.user_id
         INNER JOIN projects p ON a.project_id=p.project_id ORDER BY a.action_date DESC";
         $action_info = mysqli_query($connection, $query)->fetch_all(MYSQLI_ASSOC);
 
-    } else {
+    } else if($_SESSION['user_role']==0){
+        #user
         $query = "SELECT * FROM actions a INNER JOIN users u ON a.user_id=u.user_id
     INNER JOIN projects p ON a.project_id=p.project_id 
         WHERE a.user_id={$_SESSION['user_id']} 

@@ -89,6 +89,14 @@ if(isset($_SESSION["user_id"])){
                     unset($_SESSION["errors"]);
                     ?>
                 </div>
+            <?php }
+            if(isset($_SESSION["success"])) { ?>
+            <div class="alert alert-success" role="alert">
+                <?php
+                echo implode("<br />", $_SESSION["success"]);
+                unset($_SESSION["success"]);
+                ?>
+            </div>
             <?php } ?>
           <div class="col-lg-4 col-md-8 col-12 mx-auto" style="margin-top: 20px;">
             <div class="card z-index-0 fadeIn3 fadeInBottom">
